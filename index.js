@@ -19,12 +19,23 @@ const app = express();
 // });
 
 //middleware for '/about' route
-app.use('/about', (req, res, next) => {
+const checkToken = (req, res, next) => {
     console.log('Middleware for /about route executed');
     next();
+};
+app.use('/api', checkToken,(req, res, next) => {
+    let token = req.query.token;
+    if(token === "giveaccess") {
+        console.log('Access granted');
+        next();
+    } 
+        res.send('ACCESS DENIED!');
+
 });
 
-
+app.get('/api', (req, res) => {
+    res.send('Data');
+});
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
